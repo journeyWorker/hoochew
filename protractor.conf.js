@@ -7,6 +7,7 @@ var config = {
   // The timeout for each script run on the browser. This should be longer
   // than the maximum time your application needs to stabilize between tasks.
   allScriptsTimeout: 110000,
+    seleniumAddress: 'http://localhost:4444/wd/hub',
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
