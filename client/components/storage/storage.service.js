@@ -1,4 +1,4 @@
-(function () {
+(function (angular) {
     'use strict';
     angular
         .module('angularFullstackApp')
@@ -18,10 +18,14 @@
             angular.element.jStorage.deleteKey(key);
         };
 
+        this.flush = function() {
+            angular.element.jStorage.flush();
+        };
+
         //ttl is milliseconds
         this.setTTL = function (key, ttl) {
             angular.element.jStorage.setTTL(key,ttl);
         }
     }
-})();
+})(angular);
 
