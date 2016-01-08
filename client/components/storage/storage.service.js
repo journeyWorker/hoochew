@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular
-        .module('angularFullStackApp')
+        .module('angularFullstackApp')
         .service('storageService', storageService);
 
     /* @ngInject */
