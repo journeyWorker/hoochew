@@ -4,6 +4,7 @@ import User from './user.model';
 import passport from 'passport';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import Thing from '../thing/thing.model';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -41,7 +42,7 @@ export function create(req, res, next) {
   newUser.saveAsync()
     .spread(function(user) {
       var token = jwt.sign({ _id: user._id }, config.secrets.session, {
-        expiresIn: 60 * 60 * 5
+        expiresIn: 60 * 24 * 365
       });
       res.json({ token });
     })
@@ -59,7 +60,18 @@ export function show(req, res, next) {
       if (!user) {
         return res.status(404).end();
       }
-      res.json(user.profile);
+      // Reads the things of this user
+      Thing.findAsync({
+          'follwers.follwer': userId,
+          deleted_at: { $exists: false }
+        })
+        .populate('owner')
+        .exec(function(err, things) {
+          if (err) return validationError(err);
+          // Adds 'things' property for json rendering
+          user.things = things;
+        });
+      res.finish(user);
     })
     .catch(err => next(err));
 }

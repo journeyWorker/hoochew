@@ -25,6 +25,7 @@ module.exports = function(config) {
       'client/bower_components/jStorage/jstorage.js',
       'client/bower_components/sylvester/sylvester.js',
       'client/bower_components/gl-matrix/dist/gl-matrix-min.js',
+      'client/bower_components/restangular/dist/restangular.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

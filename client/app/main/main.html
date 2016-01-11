@@ -1,32 +1,85 @@
 <navbar></navbar>
 
 <header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
+    <div class="container">
+        <h1>'Allo, 'Allo!</h1>
+        <p class="lead">Kick-start your next web app with Angular Fullstack</p>
+        <img src="assets/images/yeoman.png" alt="I'm Yeoman">
+    </div>
 </header>
 
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>
-      </ul>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Features:</h1>
+            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.awesomeThings">
+                <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>
+            </ul>
+        </div>
+        <div class="col-lg-12">
+            <h1 class="page-header">Features:</h1>
+            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.thing">
+                <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 
-  <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="main.newThing">
-      <span class="input-group-btn">
+    <form class="thing-form">
+        <label>Syncs in realtime across clients</label>
+        <p class="input-thing">
+            <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="main.newThing">
+      <span class="input-thing-btn">
         <button type="submit" class="btn btn-primary" ng-click="main.addThing()">Add New</button>
       </span>
-    </p>
-  </form>
+        </p>
+    </form>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <tabset>
+                <tab heading="My Things">
+                    <div style="margin-top:5px;">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height:50px; background-color:#F5F5F5;">
+                                <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7 input-thing-sm pull-left" style="padding-left:0px;">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model-options="{ debounce : { 'default' : 300, blur: 0 } }"
+                                           ng-model="main.favoriteThingName"
+                                           placeholder="Search My Thing">
+                                </div>
+                                <button type="button"
+                                        class="pull-right btn btn-default btn-sm">
+                                    <i class="fa fa-users"></i> &nbsp;<a href="#" ng-click="main.createThing()">Create Thing</a>
+                                </button>
+                            </div>
+                            <div class="panel-body">
+                                <!--<thing-card info="thing" ng-repeat="thing in main.favoriteThings"></thing-card>-->
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Other Things">
+                    <div style="margin-top:5px;">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height:50px; background-color:#F5F5F5;">
+                                <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7 input-thing-sm pull-left" style="padding-left:0px;">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model-options="{ debounce : { 'default' : 300, blur: 0 } }"
+                                           ng-model="main.otherThingName"
+                                           placeholder="Search Other Thing">
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <!--<thing-card info="thing" ng-repeat="thing in main.otherThings"></thing-card>-->
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+    <div ng-include="'app/thing/create/create-thing.html'"></div>
 </div>
 
 <footer></footer>

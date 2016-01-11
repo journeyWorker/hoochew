@@ -1,7 +1,29 @@
 'use strict';
 
 angular.module('angularFullstackApp')
-  .factory('Modal', function ($rootScope, $modal) {
+  .factory('Modal', function ($rootScope,$q, $modal) {
+    // size : '', 'lg', 'sm'
+    function open(size, templateId, controller, params) {
+      var modalInstance = $modal.open({
+        templateUrl: templateId,
+        controller: controller,
+        size: size,
+        resolve: {
+          params: function () {
+            return params;
+          }
+        }
+      });
+
+      var deferred = $q.defer();
+      modalInstance.result.then(function (result) {
+        deferred.resolve(result);
+      }, function (error) {
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+    }
     /**
      * Opens a modal
      * @param  {Object} scope      - an object to be merged with modal's scope
@@ -22,7 +44,7 @@ angular.module('angularFullstackApp')
 
     // Public API here
     return {
-
+      open: open,
       /* Confirmation modals */
       confirm: {
 

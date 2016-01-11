@@ -2,8 +2,10 @@
 
 import crypto from 'crypto';
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+import * as common from '../../components/utilities/common.js';
 import {Schema} from 'mongoose';
 
+var   _ = require('lodash');
 const authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
@@ -21,7 +23,34 @@ var UserSchema = new Schema({
   salt: String,
   facebook: {},
   github: {}
-});
+},{
+  toJSON: {
+    virtuals: true,
+    getters: true,
+    transform: function(doc, ret) {
+      delete ret.__v;
+      delete ret._id;
+      delete ret.password;
+      delete ret.salt;
+
+      // when call show(id) method of user.model, set user.things = thing
+      if (doc.things) {
+        ret.things = _.chain(doc.things).map(function(things) {
+          var me = _.find(things.followers, function(follower) {
+            return follower.follower.equals(ret.id);
+          });
+          return {
+            id: thing.id,
+            name: thing.name,
+            info: thing.info,
+            follower_count: thing.followers.length,
+            role: me ? me.role : 'UNKNOWN'
+          };
+        }).sortBy(common.sortByRole).value();
+      }
+      return ret;
+    }
+}});
 
 /**
  * Virtuals

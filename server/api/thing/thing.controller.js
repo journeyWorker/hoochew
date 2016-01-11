@@ -12,6 +12,47 @@
 import _ from 'lodash';
 import Thing from './thing.model';
 
+
+
+ function getFollower(type, user) {
+  switch (type) {
+    case 'FAVORITE':
+      return {
+        id: user,
+        inverse: false
+      };
+    case 'GENERAL':
+      return {
+        id: user,
+        inverse: true
+      };
+    case 'ALL':
+    case undefined:
+      return {};
+    default:
+      throw new errors.ParamInvalidError('type');
+  }
+}
+
+function getSort(sort) {
+  switch (sort) {
+    case 'CREATED':
+      return {
+        by: 'created_at',
+        desc: false
+      };
+    case '-CREATED':
+    case undefined:
+      return {
+        by: 'created_at',
+        desc: true
+      };
+    default:
+      throw new errors.ParamInvalidError('sort');
+  }
+}
+
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
