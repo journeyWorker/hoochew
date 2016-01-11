@@ -12,7 +12,6 @@ describe('Service: storageService', function () {
     }));
 
     it('should do set Value & get Value', function () {
-        console.log(storageService);
         storageService.setValue('user-token', 'abcdefg123');
         expect(storageService.getValue('user-token')).toEqual('abcdefg123');
         storageService.flush();
