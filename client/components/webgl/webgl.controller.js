@@ -7,6 +7,12 @@ angular.module('angularFullstackApp')
     var canvas;
     var shaderProgram;
     var triangleVertexBuffer;
+    var hexagonVertexBuffer;
+    var triangleVertexColorBuffer;
+    var stripVertexBuffer;
+    var stripElementBuffer;
+
+
 
     function createGLContext(canvas) {
       var names= ["webgl", "experimental-webgl"];
@@ -101,13 +107,32 @@ angular.module('angularFullstackApp')
     }
 
     function setupBuffers() {
+
+      //육각형
+      hexagonVertexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, hexagonVertexBuffer);
+      var hexagonVertices = [
+        -0.3, 0.6, 0.0, //v0
+        -0.4, 0.8, 0.0, //v1
+        -0.6, 0.8, 0.0, //v2
+        -0.7, 0.6, 0.0, //v3
+        -0.6, 0.4, 0.0, //v4
+        -0.4, 0.4, 0.0, //v5
+        -0.3, 0.6, 0.0 //v6
+      ];
+
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(hexagonVertices), gl.STATIC_DRAW);
+      hexagonVertexBuffer.itemsize = 3;
+      hexagonVertexBuffer.numberOfItems = 7;
+
+      //삼각형
       triangleVertexBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBuffer);
       var triangleVertices = [
         //(x y z) (r g b a)
-        0.0, 0.5, 0.0, 255, 0, 0, 255, //v0
-        -0.5, -0.5, 0.0, 0, 250, 6, 255, //v1
-        0.5, -0.5, 0.0, 0, 0, 255, 255 //v2
+        0.3, 0.4, 0.0, 255, 0, 0, 255, //v0
+        0.7, 0.4, 0.0, 0, 250, 6, 255, //v1
+        0.5, 0.8, 0.0, 0, 0, 255, 255 //v2
       ];
 
       var nbrOfVertices = 3;
@@ -149,11 +174,69 @@ angular.module('angularFullstackApp')
       triangleVertexBuffer.positionSize = 3;
       triangleVertexBuffer.colorSize = 4;
       triangleVertexBuffer.numberOfItems = 3;
+
+
+      stripVertexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, stripVertexBuffer);
+      var stripVertices = [
+        -0.5,0.2,0.0,
+        -0.4,0.0,0.0,
+        -0.3,0.2,0.0,
+        -0.2,0.0,0.0,
+        -0.1,0.2,0.0,
+        0.0,0.0,0.0,
+        0.1,0.2,0.0,
+        0.2,0.0,0.0,
+        0.3,0.2,0.0,
+        0.4,0.0,0.0,
+        0.5,0.2,0.0,
+
+        -0.5,-0.3,0.0,
+        -0.4,-0.5,0.0,
+        -0.3,-0.3,0.0,
+        -0.2,-0.5,0.0,
+        -0.1,-0.3,0.0,
+        0.0,-0.5,0.0,
+        0.1,-0.3,0.0,
+        0.2,-0.5,0.0,
+        0.3,-0.3,0.0,
+        0.4,-0.5,0.0,
+        0.5,-0.3,0.0
+      ];
+
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(stripVertices), gl.STATIC_DRAW);
+      stripVertexBuffer.itemsize = 3;
+      stripVertexBuffer.numberOfItem = 22;
+
+      stripElementBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,stripElementBuffer);
+      var indices = [0,1,2,3,4,5,6,7,8,9,10,
+      10,10,11, //겹침 인덱스
+      11,12,13,14,15,16,17,18,19,20,21];
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+      stripElementBuffer.numberOfItems=25;
     }
 
     function draw() {
       gl.viewport(0,0, gl.viewportWidth, gl.viewportHeight);
       gl.clear(gl.COLOR_BUFFER_BIT);
+
+
+      //6각형 그리기
+      // 상수 색상값이 고정 -> 버텍스 애트리뷰트 배열을 비활성화
+      gl.disableVertexAttribArray(shaderProgram.vertexColorAttribute);
+      gl.vertexAttrib4f(shaderProgram.vertexColorAttribute, 0.0,0.0,0.0,1.0);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, hexagonVertexBuffer);
+      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute,
+      hexagonVertexBuffer.itemsize, gl.FLOAT, false, 0,0);
+
+      gl.drawArrays(gl.LINE_STRIP, 0, hexagonVertexBuffer.numberOfItems);
+
+
+      //삼각형 그리기
+      // 색상을 사용할 것이므로 버텍스 애트리뷰트 배열을 활성화
+      gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 
       // 좌표, 색상 정보 담는 버퍼 바인딩
       gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBuffer);
@@ -166,6 +249,26 @@ angular.module('angularFullstackApp')
         triangleVertexBuffer.colorSize, gl.UNSIGNED_BYTE, true, 16, 12);
 
       gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numberOfItems);
+
+      // 삼각형 스트립을 그린다.
+      // vertexColorAttribute를 비활성화하고, 상수 색상 값을 사용한다.
+
+      gl.disableVertexAttribArray(shaderProgram.vertexColorAttribute);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, stripVertexBuffer);
+      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute,
+      stripVertexBuffer.itemsize, gl.FLOAT, false, 0,0);
+
+      gl.vertexAttrib4f(shaderProgram.vertexColorAttribute,1.0,1.0,0.0,1.0);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, stripElementBuffer);
+
+      gl.drawElements(gl.TRIANGLE_STRIP, stripElementBuffer.numberOfItems, gl.UNSIGNED_SHORT, 0);
+
+      // 도움선을 그려 삼각형 구분하기
+      gl.vertexAttrib4f(shaderProgram.vertexColorAttribute, 0.0,0.0,0.0,1.0);
+      gl.drawArrays(gl.LINE_STRIP,0,11);
+      gl.drawArrays(gl.LINE_STRIP,11,11);
+
     }
 
     function startup() {
@@ -173,7 +276,11 @@ angular.module('angularFullstackApp')
       gl = createGLContext(canvas);
       setupShaders();
       setupBuffers();
-      gl.clearColor(0.0,0.0,0.0,1.0);
+      gl.clearColor(1.0,1.0,1.0,1.0);
+
+      gl.frontFace(gl.CCW);
+      gl.enable(gl.CULL_FACE);
+      gl.cullFace(gl.BACK);
       draw();
     }
 
