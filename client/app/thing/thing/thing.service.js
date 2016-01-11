@@ -19,14 +19,11 @@ angular.module('angularFullstackApp')
       } else {
         thing = {type: 'GENERAL', sort: '-CREATED'};
       }
-
-
       if(params) {
         params = angular.extend(thing,params);
       } else {
         params = thing;
       }
-
       return things.customGET('',params);
     }
 

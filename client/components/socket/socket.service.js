@@ -27,7 +27,6 @@ angular.module('angularFullstackApp')
        */
       syncUpdates(modelName, array, cb) {
         cb = cb || angular.noop;
-
         /**
          * Syncs item creation/updates on 'model:save'
          */

@@ -54,7 +54,6 @@ export function create(req, res, next) {
  */
 export function show(req, res, next) {
   var userId = req.params.id;
-
   User.findByIdAsync(userId)
     .then(user => {
       if (!user) {
@@ -66,14 +65,16 @@ export function show(req, res, next) {
           deleted_at: { $exists: false }
         })
         .populate('owner')
-        .exec(function(err, things) {
-          if (err) return validationError(err);
-          // Adds 'things' property for json rendering
+        .exec()
+      .then(validationError(res))
+      .then(things => {
           user.things = things;
-        });
-      res.finish(user);
+        })
+      .then(user => {
+        res.finish(user);
+      })
     })
-    .catch(err => next(err));
+    .catch(handleError(res));
 }
 
 /**

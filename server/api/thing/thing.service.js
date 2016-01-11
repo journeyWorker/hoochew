@@ -77,9 +77,9 @@ export function create(params, user) {
     follower: user.id,
     role: 'OWNER'
   }];
-  return Thing.createAsync(params)
+  return Thing.create(params)
   .populate('owner followers.follower').exec()
-    .then(handleEntityNotFound(res));
+    .then(handleEntityNotFound());
 }
 
 // Updates an existing thing in the DB.
@@ -106,7 +106,6 @@ exports.followers = {
   enroll: function(thing, user) {
     var auto_approval = true,
       role = 'FOLLOWER';
-
     return thing.update({
       $addToSet: {
         followers: {

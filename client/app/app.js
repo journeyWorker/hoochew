@@ -10,7 +10,8 @@ angular.module('angularFullstackApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'validation.match'
+  'validation.match',
+  'restangular'
 ])
   .config(function($urlRouterProvider, $locationProvider) {
     $urlRouterProvider

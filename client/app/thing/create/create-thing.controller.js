@@ -17,10 +17,9 @@
     function _init() {
       $scope.thing = {
         name: '',
-        description: ''
+        info: ''
       };
     }
-
     function create() {
       thing
         .create($scope.thing)
@@ -29,10 +28,8 @@
         }, function(error) {
         });
     }
-
     function cancel() {
       $modalInstance.dismiss('cancel');
     }
   }
-
 })();

@@ -4,7 +4,7 @@
 
 class MainController {
 /* @ngInject */
-  constructor($http, $scope,thing, Modal,socket) {
+  constructor($http, $scope,thing,Modal,socket) {
     this.$http = $http;
     this.awesomeThings = [];
 
@@ -12,6 +12,7 @@ class MainController {
     vm.favoriteThings = [];
     vm.otherThings = [];
     vm.createThing = createThing;
+
 
     function createThing() {
       Modal
@@ -22,10 +23,11 @@ class MainController {
         }, function(error) {});
     }
 
+
     function _things(isFavorite,params) {
       thing
         .getThings(isFavorite,params)
-        .then((response) -> {
+        .then(response => {
           logger.info('thing list: ', response.data);
           if(isFavorite) {
             vm.favoriteThings = response.data;
@@ -35,10 +37,10 @@ class MainController {
         })
     }
 
-    $http.get('/api/things').then(response => {
-      this.awesomeThings = response.data;
-      socket.syncUpdates('thing', this.awesomeThings);
-    });
+    //$http.get('/api/things').then(response => {
+    //  this.awesomeThings = response.data;
+    //  socket.syncUpdates('thing', this.awesomeThings);
+    //});
 
     $scope.$on('$destroy', function() {
       socket.unsyncUpdates('thing');
@@ -47,16 +49,15 @@ class MainController {
     $scope.$watch(function() {
       return vm.myThingName;
     }, function(newVal, oldVal) {
-      _things(true, {name: vm.myThingName});
+      //_things(true, {name: vm.myThingName});
     });
 
     $scope.$watch(function() {
       return vm.otherThingName;
     }, function(newVal, oldVal) {
-      _things(false, {name: vm.otherThingName});
+      //_things(false, {name: vm.otherThingName});
     });
   }
-
 
 
   addThing() {

@@ -15,7 +15,7 @@ import ThingService from './thing.service';
 import errors from '../../components/errors/error';
 
 
-exports.list = list;
+exports.index = index;
 exports.show = show;
 exports.create = create;
 exports.update = update;
@@ -81,7 +81,6 @@ function getSort(sort) {
 function index(req, res, next) {
   var follower = getFollower(req.query.type, req.user.id); //req.login.id);
   var sort = getSort(req.query.sort);
-
   var options = {
     name: req.query.name,
     follower: {

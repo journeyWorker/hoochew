@@ -9,30 +9,30 @@
 </header>
 
 <div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Features:</h1>
-            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.awesomeThings">
-                <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>
-            </ul>
-        </div>
-        <div class="col-lg-12">
-            <h1 class="page-header">Features:</h1>
-            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.thing">
-                <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>
-            </ul>
-        </div>
-    </div>
+    <!--<div class="row">-->
+        <!--<div class="col-lg-12">-->
+            <!--<h1 class="page-header">Features:</h1>-->
+            <!--<ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.awesomeThings">-->
+                <!--<li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--<div class="col-lg-12">-->
+            <!--<h1 class="page-header">Features:</h1>-->
+            <!--<ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.thing">-->
+                <!--<li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="main.deleteThing(thing)">&times;</button></a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
 
-    <form class="thing-form">
-        <label>Syncs in realtime across clients</label>
-        <p class="input-thing">
-            <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="main.newThing">
-      <span class="input-thing-btn">
-        <button type="submit" class="btn btn-primary" ng-click="main.addThing()">Add New</button>
-      </span>
-        </p>
-    </form>
+    <!--<form class="thing-form">-->
+        <!--<label>Syncs in realtime across clients</label>-->
+        <!--<p class="input-thing">-->
+            <!--<input type="text" class="form-control" placeholder="Add a new thing here." ng-model="main.newThing">-->
+      <!--<span class="input-thing-btn">-->
+        <!--<button type="submit" class="btn btn-primary" ng-click="main.addThing()">Add New</button>-->
+      <!--</span>-->
+        <!--</p>-->
+    <!--</form>-->
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <tabset>
