@@ -329,7 +329,6 @@ angular.module('angularFullstackApp')
       setupBuffers();
       gl.clearColor(1.0, 1.0, 1.0, 1.0);
       gl.enable(gl.DEPTH_TEST);
-
       draw();
     }
 
