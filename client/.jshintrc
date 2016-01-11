@@ -35,6 +35,8 @@
     "expect": true,
     "browser": true,
     "element": true,
-    "by": true
+    "by": true,
+    "mat4": true,
+    "vec3": true
   }
 }

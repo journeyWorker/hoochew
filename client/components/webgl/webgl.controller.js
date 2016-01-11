@@ -8,9 +8,15 @@ angular.module('angularFullstackApp')
     var shaderProgram;
     var triangleVertexBuffer;
     var hexagonVertexBuffer;
-    var triangleVertexColorBuffer;
     var stripVertexBuffer;
     var stripElementBuffer;
+
+    var cubeVertexPositionBuffer;
+    var cubeVertexIndexBuffer;
+    var modelViewMatrix = mat4.create();
+    var projectionViewMatrix = mat4.create();
+
+
 
 
 
@@ -107,6 +113,68 @@ angular.module('angularFullstackApp')
     }
 
     function setupBuffers() {
+
+      //큐브
+      cubeVertexPositionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+
+      var cubeVertexPosition = [
+        // Front face
+        -1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
+
+        // Back face
+        -1.0, -1.0, -1.0,
+        -1.0,  1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0, -1.0, -1.0,
+
+        // Top face
+        -1.0,  1.0, -1.0,
+        -1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0, -1.0,
+
+        // Bottom face
+        -1.0, -1.0, -1.0,
+        1.0, -1.0, -1.0,
+        1.0, -1.0,  1.0,
+        -1.0, -1.0,  1.0,
+
+        // Right face
+        1.0, -1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0,  1.0,  1.0,
+        1.0, -1.0,  1.0,
+
+        // Left face
+        -1.0, -1.0, -1.0,
+        -1.0, -1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        -1.0,  1.0, -1.0
+      ];
+
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVertexPosition),gl.STATIC_DRAW);
+      cubeVertexPositionBuffer.itemsize = 3;
+      cubeVertexPositionBuffer.numberOfItems = 24;
+
+      cubeVertexIndexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+      var cubeVertexIndices = [
+        0,  1,  2,      0,  2,  3,    // front
+        4,  5,  6,      4,  6,  7,    // back
+        8,  9,  10,     8,  10, 11,   // top
+        12, 13, 14,     12, 14, 15,   // bottom
+        16, 17, 18,     16, 18, 19,   // right
+        20, 21, 22,     20, 22, 23    // left
+      ];
+
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices),gl.STATIC_DRAW);
+      cubeVertexIndexBuffer.itemsize = 1;
+      cubeVertexIndexBuffer.numberOfItems = 36;
+
 
       //육각형
       hexagonVertexBuffer = gl.createBuffer();

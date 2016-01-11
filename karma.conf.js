@@ -24,7 +24,6 @@ module.exports = function(config) {
       'client/bower_components/angular-validation-match/dist/angular-validation-match.min.js',
       'client/bower_components/jStorage/jstorage.js',
       'client/bower_components/sylvester/sylvester.js',
-      'client/bower_components/mjs/mjs.js',
       'client/bower_components/gl-matrix/dist/gl-matrix-min.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
