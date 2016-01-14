@@ -20,6 +20,19 @@ function handleError(res, statusCode) {
   };
 }
 
+function respondWithResult(res, statusCode) {
+  statusCode = statusCode || 200;
+
+  return function(entity) {
+    if (entity) {
+      var result = { 'data': entity };
+      if (res.token) result.token = res.token;
+      res.status(statusCode).json(result);
+    }
+  };
+}
+
+
 /**
  * Get list of users
  * restriction: 'admin'
@@ -59,21 +72,18 @@ export function show(req, res, next) {
       if (!user) {
         return res.status(404).end();
       }
-      // Reads the things of this user
-      Thing.findAsync({
-          'follwers.follwer': userId,
-          deleted_at: { $exists: false }
-        })
-        .populate('owner')
-        .exec()
-      .then(validationError(res))
-      .then(things => {
-          user.things = things;
-        })
-      .then(user => {
-        res.finish(user);
-      })
+      var query = Thing.find({
+        'follwers.follwer': userId,
+        deleted_at: {$exists: false}
+      });
+      var things = query.populate('owner').exec()
+        .then(function(entity) {
+          return entity;
+        });
+      user.things = things;
+      return user;
     })
+    .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
@@ -123,8 +133,18 @@ export function me(req, res, next) {
       if (!user) {
         return res.status(401).end();
       }
-      res.json(user);
+      var query = Thing.find({
+        'follwers.follwer': userId,
+        deleted_at: {$exists: false}
+      });
+      var things = query.populate('owner').exec()
+        .then(function(entity) {
+          return entity;
+      });
+      user.things = things;
+      return user;
     })
+    .then(respondWithResult(res))
     .catch(err => next(err));
 }
 

@@ -13,9 +13,9 @@ angular.module('angularFullstackApp', [
   'validation.match',
   'restangular'
 ])
-  .config(function($urlRouterProvider, $locationProvider) {
+  .config(function($urlRouterProvider, $locationProvider,RestangularProvider) {
     $urlRouterProvider
       .otherwise('/');
-
+    RestangularProvider.setBaseUrl('/api/');
     $locationProvider.html5Mode(true);
   });

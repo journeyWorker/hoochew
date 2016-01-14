@@ -34,16 +34,18 @@ var UserSchema = new Schema({
       delete ret.salt;
 
       // when call show(id) method of user.model, set user.things = thing
-      if (doc.things) {
-        ret.things = _.chain(doc.things).map(function(things) {
-          var me = _.find(things.followers, function(follower) {
+      console.log(doc);
+      if (ret.hasOwnProperty("things")) {
+        ret.things = _.chain(doc.things).map(function(thing) {
+          var me = _.find(thing.followers, function(follower) {
             return follower.follower.equals(ret.id);
           });
+          console.log(thing);
           return {
             id: thing.id,
             name: thing.name,
             info: thing.info,
-            follower_count: thing.followers.length,
+            follower_count: thing.followers ? thing.followers.length : 0,
             role: me ? me.role : 'UNKNOWN'
           };
         }).sortBy(common.sortByRole).value();

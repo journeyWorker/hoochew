@@ -11,9 +11,9 @@
 
 import _ from 'lodash';
 import Thing from './thing.model';
-import ThingService from './thing.service';
 import errors from '../../components/errors/error';
 
+var ThingService = require('./thing.service');
 
 exports.index = index;
 exports.show = show;
@@ -24,9 +24,13 @@ exports.destroy = destroy;
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
+
   return function(entity) {
     if (entity) {
-      res.status(statusCode).json(entity);
+      var result = { 'data': entity };
+      if (res.token) result.token = res.token;
+      console.log(result);
+      res.status(statusCode).json(result);
     }
   };
 }
@@ -113,7 +117,7 @@ export function show(req, res) {
 
 // Creates a new Thing in the DB
 export function create(req, res) {
-  ThingService.create(req.body)
+  ThingService.create(req.body,req.user)
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }

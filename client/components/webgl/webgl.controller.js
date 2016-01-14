@@ -34,7 +34,6 @@ angular.module('angularFullstackApp')
       }
       return context;
     }
-
     function loadShaderFromDOM(id) {
       var shaderScript = document.getElementById(id);
 

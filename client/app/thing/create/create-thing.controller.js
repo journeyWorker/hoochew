@@ -24,6 +24,7 @@
       thing
         .create($scope.thing)
         .then(function(response) {
+          console.log(response);
           $modalInstance.close(response.data);
         }, function(error) {
         });

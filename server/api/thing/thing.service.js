@@ -5,7 +5,8 @@
 'use strict';
 
 import _ from 'lodash';
-import Thing from './thing.model';
+
+var Thing = require('./thing.model');
 
 function saveUpdates(updates) {
   return function(entity) {
@@ -22,8 +23,20 @@ function handleEntityNotFound() {
     if (!entity) {
       return null;
     }
+    console.log(entity);
     return entity;
   };
+}
+
+function populateThing() {
+  return function(entity) {
+    return entity.populate('owner follower.follow').exec()
+    .then(
+      entity => {
+        return entity;
+      }
+    );
+  }
 }
 
 // Get list of thing
@@ -38,9 +51,8 @@ export function index(options) {
   if (options.limit < 1) options.limit = 1;
   if (options.limit > 100) options.limit = 100;
 
-  var query = Thing.findAsync();
+  var query = Thing.find();
   query.where('deleted_at').exists(false);
-
   if (options.name) query.where('name').equals(new RegExp(options.name, 'i'));
   if (options.follower && options.follower.id) {
     var follower = options.follower;
@@ -49,7 +61,6 @@ export function index(options) {
     if (follower.inverse) query.ne(follower.id);
     else query.equals(follower.id);
   }
-
   var sort = options.sort;
   query.where(sort.by);
   if (sort.lt) query.lt(sort.lt);
@@ -73,20 +84,25 @@ export function show(id) {
 // Creates a new thing in the DB.
 export function create(params, user) {
   params.owner = user.id;
-  params.follwers =[{
+  params.followers =
+    [{
     follower: user.id,
     role: 'OWNER'
   }];
-  return Thing.create(params)
-  .populate('owner followers.follower').exec()
-    .then(handleEntityNotFound());
+  return Thing.createAsync(params)
+    .then(handleEntityNotFound())
+    .then(thing => {
+      return Thing.findOne(thing)
+        .populate('owner followers.follower').exec()
+        .then(handleEntityNotFound());
+      });
 }
 
 // Updates an existing thing in the DB.
 export function update(id, params) {
   return Thing.findByIdAsync(id)
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body));
+    .then(handleEntityNotFound())
+    .then(saveUpdates(params));
 }
 
 // Deletes a thing from the DB.
